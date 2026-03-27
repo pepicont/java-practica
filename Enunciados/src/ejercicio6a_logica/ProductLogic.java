@@ -17,4 +17,16 @@ public class ProductLogic {
 	public Product getOne(int id){
 		return dp.getOne(id);
 	}
+	
+	public Product create(String name, String description, double price, int stock, boolean shippingIncluded) {
+		return dp.create(name, description, price, stock, shippingIncluded);
+	}
+	
+	public Product update(int id, String name, String description, double price, int stock, boolean shippingIncluded) {
+		return dp.update(id, name, description, price, stock, shippingIncluded);
+	}
+	
+	public int delete(int id) {
+		return dp.delete(id);
+	}
 }

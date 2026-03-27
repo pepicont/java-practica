@@ -80,4 +80,105 @@ public class DataProduct {
 		
 		return product;
 	}
+	
+	public Product create(String name, String description, double price, int stock, boolean shippingIncluded) {
+		
+		Product product = null;
+		
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/java_market","java","himitsu");
+				PreparedStatement stmt = conn.prepareStatement("insert into product(name, description, price, stock,"
+						+ "shipping_included) values(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)){
+			
+				stmt.setString(1, name);
+				stmt.setString(2, description);
+				stmt.setDouble(3, price);
+				stmt.setInt(4, stock);
+				stmt.setBoolean(5, shippingIncluded);
+				stmt.executeUpdate();
+				try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						int id = generatedKeys.getInt(1);
+						product = new Product();
+						product.setId(id);
+						product.setName(name);
+						product.setDescription(description);
+						product.setPrice(price);
+						product.setStock(stock);
+						product.setShippingIncluded(shippingIncluded);
+					}
+					else {
+						throw new SQLException("Creating product failed, no ID obtained.");
+					}}catch (SQLException e) { //este catch es del 2do try-w-resources
+						e.printStackTrace();
+					}
+					
+				}
+				catch (SQLException e) {
+				e.printStackTrace();
+				}
+		
+		return product;
+	}
+	
+	public int delete(int id){
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/java_market","java","himitsu");
+			stmt = conn.prepareStatement("delete from product where id=?");
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+				}
+				 catch (SQLException e) {
+				e.printStackTrace();
+				}
+		finally {
+			//cierre de recursos
+			try {
+				if(stmt != null) {stmt.close();}
+				if(conn != null) {conn.close();}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+	
+		return id;
+	}
+	
+	public Product update(int id, String name, String description, double price, int stock, boolean shippingIncluded){
+		
+		Product product = null;
+		
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/java_market","java","himitsu");
+				PreparedStatement stmt = conn.prepareStatement("update product set name=?, description=?, price=?"
+						+ ",stock=?, shipping_included=? where id=?")){
+						
+			
+				stmt.setString(1, name);
+				stmt.setString(2, description);
+				stmt.setDouble(3, price);
+				stmt.setInt(4, stock);
+				stmt.setBoolean(5, shippingIncluded);
+				stmt.setInt(6, id);
+				int rows = stmt.executeUpdate();
+				if(rows > 0) {
+						product = new Product();
+						product.setId(id);
+						product.setName(name);
+						product.setDescription(description);
+						product.setPrice(price);
+						product.setStock(stock);
+						product.setShippingIncluded(shippingIncluded);
+					}
+					else {
+						throw new SQLException("Updating went wrong.");
+					}}
+					catch (SQLException e) {
+						e.printStackTrace();
+					}
+		
+		return product;
+	}
 }
