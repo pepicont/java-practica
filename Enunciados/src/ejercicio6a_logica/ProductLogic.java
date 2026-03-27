@@ -13,4 +13,8 @@ public class ProductLogic {
 	public LinkedList<Product> getAll(){
 		return dp.getAll();
 	}
+	
+	public Product getOne(int id){
+		return dp.getOne(id);
+	}
 }
