@@ -1,5 +1,6 @@
 package ejercicio6a_logica;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 
 import ejercicio6a_data.DataProduct;
@@ -22,11 +23,11 @@ public class ProductLogic {
 		return dp.create(name, description, price, stock, shippingIncluded);
 	}
 	
-	public Product update(int id, String name, String description, double price, int stock, boolean shippingIncluded) {
+	public Product update(int id, String name, String description, double price, int stock, boolean shippingIncluded) throws SQLException {
 		return dp.update(id, name, description, price, stock, shippingIncluded);
 	}
 	
-	public int delete(int id) {
+	public int delete(int id) throws SQLException {
 		return dp.delete(id);
 	}
 }

@@ -120,7 +120,7 @@ public class DataProduct {
 		return product;
 	}
 	
-	public int delete(int id){
+	public int delete(int id) throws SQLException{
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -129,10 +129,13 @@ public class DataProduct {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/java_market","java","himitsu");
 			stmt = conn.prepareStatement("delete from product where id=?");
 			stmt.setInt(1, id);
-			stmt.executeUpdate();
-				}
+			int rows=stmt.executeUpdate();
+			if(rows == 0) {
+				throw new SQLException("Deleting went wrong.");
+			}
+				} 
 				 catch (SQLException e) {
-				e.printStackTrace();
+				throw e;
 				}
 		finally {
 			//cierre de recursos
@@ -147,7 +150,7 @@ public class DataProduct {
 		return id;
 	}
 	
-	public Product update(int id, String name, String description, double price, int stock, boolean shippingIncluded){
+	public Product update(int id, String name, String description, double price, int stock, boolean shippingIncluded) throws SQLException{
 		
 		Product product = null;
 		
@@ -176,7 +179,7 @@ public class DataProduct {
 						throw new SQLException("Updating went wrong.");
 					}}
 					catch (SQLException e) {
-						e.printStackTrace();
+						throw e;
 					}
 		
 		return product;
