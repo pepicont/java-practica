@@ -1,3 +1,4 @@
 bin/
 Enunciados/bin/
-Enunciados/lib/*.jar
+.metadata/
+Enunciados/.metadata/
